@@ -23,6 +23,17 @@ const FileUpload = () => {
       dispatch(showPopupAction("업로드 실패", e.response.data.message, "danger"))
     })
   }
+  const deleteHandler = (index) => {
+    const deleteImage = images[index];
+    const config = getAuthConfig();
+    axios.delete(`${API}/api/v1/product/image?path=${deleteImage.path}`, config)
+      .then(value => {
+        setImages([...images.splice(0, index), ...images.splice(index + 1)])
+      }).catch(e => {
+      dispatch(showPopupAction("업로드 실패", e.response.data.message, "danger"))
+    })
+  }
+  
   return (
     <div className="d-flex justify-content-between">
       <Dropzone onDrop={acceptedFiles => dropHandler(acceptedFiles)}>
@@ -37,7 +48,7 @@ const FileUpload = () => {
       </Dropzone>
       <div className="d-flex" style={{overflowX: 'scroll'}}>
         {images.map((value, index) =>
-          <div key={`images_${index}`}>
+          <div onClick={() => deleteHandler(index)} key={`images_${index}`}>
             <img style={{objectFit: "contain", maxWidth: 200, maxHeight: 200}} src={`${API}/${value.path}`}/>
           </div>
         )}
