@@ -14,7 +14,7 @@ const Header = (props) => {
     await router.push("/user/signIn")
   }
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="light" expand="lg" fixed="top">
       <div className="container">
         <Link href=" /">
           <Navbar.Brand href="#">
