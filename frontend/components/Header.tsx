@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import { isAdmin, isLogged, loggedEmail } from "../actions/auth";
+import { Nav, Navbar } from 'react-bootstrap';
 
 
 const Header = (props) => {
@@ -13,56 +14,34 @@ const Header = (props) => {
     await router.push("/user/signIn")
   }
   return (
-    <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <Link href="/">
-          <a className="navbar-brand" href="#">{APP_NAME}</a>
-        </Link>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"/>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav ml-auto">
-            {isLogged() ?
-              <>
-                <li className="nav-item">
-                  <Link href="/product/upload">
-                    <a className={`nav-link ${router.pathname === '/product/upload' && 'active'}`} href="">업로드</a>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="" onClick={logout}>로그아웃</a>
-                </li>
-                {isAdmin() ?
-                  (<li className="nav-item">
-                    <Link href="/admin">
-                      <a className={`nav-link ${router.pathname === '/admin' && 'active'}`} href="">{loggedEmail()}</a>
-                    </Link>
-                  </li>)
-                  : (<li className="nav-item">
-                    <Link href="/user">
-                      <a className={`nav-link ${router.pathname === '/user' && 'active'}`} href="">{loggedEmail()}</a>
-                    </Link>
-                  </li>)}
-              </>
-              : <>
-                <li className="nav-item">
-                  <Link href="/user/signIn">
-                    <a className={`nav-link ${router.pathname === '/user/signIn' && 'active'}`} href="">로그인</a>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link href="/user/signUp">
-                    <a className={`nav-link ${router.pathname === '/user/signUp' && 'active'}`} href="">회원가입</a>
-                  </Link>
-                </li>
-              </>
-            }
-          </ul>
-        </div>
-      </nav>
-    </>
+    <Navbar bg="light" expand="lg">
+      <Link href=" /">
+        <Navbar.Brand href="#">
+          {APP_NAME}
+        </Navbar.Brand>
+      </Link>
+      <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+      <Navbar.Collapse id="basic-navbar-nav">
+        {isLogged() ?
+          <Nav className="ml-auto">
+            <Link href="/product/upload">
+              <Nav.Link href="#home">업로드</Nav.Link>
+            </Link>
+            <Nav.Link onClick={logout}>로그아웃</Nav.Link>
+            <Link href={isAdmin() ? "/admin" : "/user"}>
+              <Nav.Link href="#">{loggedEmail()}</Nav.Link>
+            </Link>
+          </Nav> :
+          <Nav className="ml-auto">
+            <Link href="/user/signIn">
+              <Nav.Link href="/user/signIn">로그인</Nav.Link>
+            </Link>
+            <Link href="/user/signUp">
+              <Nav.Link href="/user/signIn">회원가입</Nav.Link>
+            </Link>
+          </Nav>}
+      </Navbar.Collapse>
+    </Navbar>
   )
 }
 
